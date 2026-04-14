@@ -1,0 +1,35 @@
+apiVersion: catalog.bubustack.io/v1alpha1
+kind: EngramTemplate
+metadata:
+  name: materialize
+  annotations:
+    registry.bubustack.io/maturity: experimental
+spec:
+  version: 0.1.0
+  description: "Evaluates templates with hydrated inputs and returns a small resolved result."
+  image: ghcr.io/bubustack/materialize-engram:0.1.0
+  supportedModes:
+    - job
+    - deployment
+  configSchema:
+    type: object
+    additionalProperties: false
+  inputSchema:
+    type: object
+    properties:
+      mode:
+        type: string
+        description: "Evaluation mode: condition or object."
+      template:
+        x-kubernetes-preserve-unknown-fields: true
+        description: "Template string or JSON object to resolve."
+      vars:
+        type: object
+        x-kubernetes-preserve-unknown-fields: true
+        description: "Template context (inputs, steps, packet, etc.)."
+  outputSchema:
+    type: object
+    properties:
+      result:
+        x-kubernetes-preserve-unknown-fields: true
+        description: "Resolved value from the template evaluation."
